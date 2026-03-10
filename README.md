@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # smart_desk_web
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -42,3 +43,6 @@ npm run build
 ```sh
 npm run lint
 ```
+=======
+# ---
+>>>>>>> 8c85e63cc3a42763e65137c890dad4022f91a9ad
