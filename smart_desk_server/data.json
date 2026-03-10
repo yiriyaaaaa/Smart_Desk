@@ -1,0 +1,173 @@
+{
+  "users": [
+    {
+      "id": 1002,
+      "name": "李四",
+      "class": "一年级2班"
+    },
+    {
+      "id": 1003,
+      "name": "梅轩宇",
+      "class": "一年级3班"
+    },
+    {
+      "id": 1004,
+      "name": "荣昊天",
+      "class": "一年级4班"
+    },
+    {
+      "id": 1005,
+      "name": "马天元",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1006,
+      "name": "梅轩宇",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1007,
+      "name": "荣昊天",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1008,
+      "name": "马天元",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1009,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1010,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1011,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1012,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1013,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1014,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1015,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1016,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1017,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1018,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1019,
+      "name": "李四",
+      "class": "一年级5班"
+    },
+    {
+      "id": 1020,
+      "name": "李四",
+      "class": "一年级5班"
+    }
+  ],
+  "study_sessions": [
+    {
+      "recordId": 2001,
+      "userId": 1001,
+      "startTime": "2026-03-09 08:30:00",
+      "endTime": "2026-03-09 11:00:00",
+      "duration": 150
+    },
+    {
+      "recordId": 2002,
+      "userId": 1001,
+      "startTime": "2026-03-09 14:00:00",
+      "endTime": "2026-03-09 16:30:00",
+      "duration": 150
+    },
+    {
+      "recordId": 2003,
+      "userId": 1002,
+      "startTime": "2026-03-09 09:00:00",
+      "endTime": "2026-03-09 10:30:00",
+      "duration": 90
+    },
+    {
+      "recordId": 2004,
+      "userId": 1003,
+      "startTime": "2026-03-09 10:00:00",
+      "endTime": "2026-03-09 11:30:00",
+      "duration": 90
+    },
+    {
+      "recordId": 2005,
+      "userId": 1004,
+      "startTime": "2026-03-09 13:00:00",
+      "endTime": "2026-03-09 15:00:00",
+      "duration": 120
+    }
+  ],
+  "devices": [
+    {
+      "id": 3001,
+      "status": "online",
+      "height": 72,
+      "light": 300,
+      "lastUpdateTime": "2026-03-09 10:30:00"
+    },
+    {
+      "id": 3002,
+      "status": "offline",
+      "height": 75,
+      "light": 280,
+      "lastUpdateTime": "2026-03-08 18:15:00"
+    },
+    {
+      "id": 3003,
+      "status": "error",
+      "height": 70,
+      "light": 320,
+      "lastUpdateTime": "2026-03-09 09:45:00"
+    }
+  ],
+  "posture": [
+    {
+      "id": 4001,
+      "userId": 1001,
+      "postureStatus": "normal",
+      "createTime": "2026-03-09 08:30:00"
+    },
+    {
+      "id": 4002,
+      "userId": 1001,
+      "postureStatus": "abnormal",
+      "createTime": "2026-03-09 09:15:00"
+    }
+  ]
+}
