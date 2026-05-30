@@ -1,0 +1,97 @@
+.page {
+  min-height: 100vh;
+}
+
+.header-mini {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx;
+}
+
+.header-mini-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.header-mini-sub {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.7);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.content {
+  padding: 30rpx;
+}
+
+.session-card {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.session-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40rpx;
+  margin-right: 24rpx;
+}
+
+.session-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #667eea;
+  border: 4rpx solid #e8ecfd;
+  flex-shrink: 0;
+}
+
+.session-line {
+  width: 4rpx;
+  flex: 1;
+  background: #e8ecfd;
+  margin: 8rpx 0;
+}
+
+.session-right {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.08);
+}
+
+.session-header {
+  margin-bottom: 12rpx;
+}
+
+.session-duration {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.session-time {
+  font-size: 24rpx;
+  color: #b2bec3;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #b2bec3;
+}

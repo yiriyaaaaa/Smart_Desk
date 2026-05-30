@@ -1,91 +1,141 @@
 <template>
   <div class="study-data-container">
-    <el-page-header @back="goBack" content="学习记录管理" />
-    
-    <!-- 筛选条件区域 -->
-    <el-row :gutter="20" style="margin: 20px 0;">
-      <el-col :span="8">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">📖 学习数据</h2>
+        <p class="page-desc">查看所有学生的学习记录与趋势</p>
+      </div>
+    </div>
+
+    <el-card class="chart-card">
+      <template #header>
+        <div class="chart-header">
+          <span>📈 学习时长趋势</span>
+          <el-date-picker
+            v-model="chartDateRange"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            size="small"
+            value-format="YYYY-MM-DD"
+            style="width: 260px"
+            @change="initTrendChart"
+          />
+        </div>
+      </template>
+      <div ref="trendChartRef" style="height: 340px"></div>
+      <div v-if="trendEmpty" class="chart-empty">
+        <el-empty description="暂无数据" />
+      </div>
+    </el-card>
+
+    <el-card class="table-card">
+      <template #header>
+        <span>📋 学习记录列表</span>
+      </template>
+
+      <div class="toolbar">
         <el-date-picker
           v-model="dateRange"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          style="width: 100%"
           value-format="YYYY-MM-DD"
+          style="width: 280px"
         />
-      </el-col>
-      <el-col :span="8">
-        <el-select v-model="selectedUser" placeholder="请选择学生" style="width: 100%">
-          <el-option label="全部" value="" />
-          <el-option 
-            v-for="user in userList" 
-            :key="user.id" 
-            :label="user.name" 
-            :value="user.id" 
-          />
+        <el-select v-model="selectedUser" placeholder="选择学生" clearable style="width: 180px">
+          <el-option v-for="u in userList" :key="u.id" :label="u.name" :value="u.id" />
         </el-select>
-      </el-col>
-      <el-col :span="8">
-        <el-button type="primary" icon="Search" @click="fetchRecords">查询</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-col>
-    </el-row>
+        <el-button type="primary" @click="fetchRecords">
+          <el-icon><Search /></el-icon> 查询
+        </el-button>
+        <el-button :icon="Refresh" @click="resetQuery">重置</el-button>
+      </div>
 
-    <!-- 学习记录表格 -->
-    <el-table 
-      :data="studyRecordList" 
-      border 
-      style="width: 100%" 
-      v-loading="loading"
-      empty-text="暂无学习记录数据"
-    >
-      <el-table-column prop="recordId" label="记录ID" width="100" />
-      <el-table-column prop="userId" label="学生ID" width="100" />
-      <el-table-column prop="userName" label="学生姓名" width="120" />
-      <el-table-column prop="startTime" label="开始时间" />
-      <el-table-column prop="endTime" label="结束时间" />
-      <el-table-column prop="duration" label="时长（分钟）" width="120" />
-    </el-table>
+      <el-table :data="studyRecordList" border stripe v-loading="loading" empty-text="暂无学习记录">
+        <el-table-column prop="recordId" label="记录ID" width="100" align="center" />
+        <el-table-column prop="userId" label="学生ID" width="100" align="center" />
+        <el-table-column prop="userName" label="学生姓名" width="120" />
+        <el-table-column prop="startTime" label="开始时间" />
+        <el-table-column prop="endTime" label="结束时间" />
+        <el-table-column prop="duration" label="时长(分钟)" width="130" align="center">
+          <template #default="{ row }">
+            <el-tag :type="row.duration >= 120 ? 'success' : row.duration >= 60 ? 'warning' : 'info'">
+              {{ row.duration }}
+            </el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 分页组件 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      style="margin-top: 20px; text-align: right;"
-    >
-    </el-pagination>
+      <el-pagination
+        class="pagination"
+        :current-page="pageNum"
+        :page-sizes="[10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </el-card>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import request from '../utils/request'
+import * as echarts from 'echarts'
+import { Search, Refresh } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
-// 筛选条件
-const router = useRouter()
-const goBack = () => router.push('/')
+const trendChartRef = ref(null)
+let trendChart = null
+const trendEmpty = ref(false)
+const chartDateRange = ref([])
+
 const dateRange = ref([])
 const selectedUser = ref('')
-
-// 分页参数
 const pageNum = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
-
-// 数据列表和加载状态
 const studyRecordList = ref([])
 const userList = ref([])
 const loading = ref(false)
 
-// 重置查询条件
+const fetchUserList = async () => {
+  try {
+    const res = await request.get('/api/users', { params: { page: 1, size: 200 } })
+    if (res.code === 200) userList.value = res.data.list || []
+  } catch { console.error('加载用户列表失败') }
+}
+
+const fetchRecords = async () => {
+  loading.value = true
+  try {
+    const params = { page: pageNum.value, size: pageSize.value }
+    if (selectedUser.value) params.userId = selectedUser.value
+    if (dateRange.value.length === 2) {
+      params.from = dateRange.value[0]
+      params.to = dateRange.value[1]
+    }
+    const res = await request.get('/api/study-sessions', { params })
+    if (res.code === 200) {
+      studyRecordList.value = (res.data || []).map(s => ({
+        ...s,
+        userName: s.userName || `用户${s.userId}`
+      }))
+      total.value = res.total || 0
+    }
+  } catch (e) {
+    console.error('获取记录失败:', e)
+    ElMessage.error('获取记录失败')
+  } finally {
+    loading.value = false
+  }
+}
+
 const resetQuery = () => {
   dateRange.value = []
   selectedUser.value = ''
@@ -93,79 +143,119 @@ const resetQuery = () => {
   fetchRecords()
 }
 
-// 获取用户列表（下拉框用）
-const fetchUserList = async () => {
+const initTrendChart = async () => {
   try {
-    const res = await request.get('/api/users')
-    if (res.code === 200) {
-      userList.value = res.data.list || []
+    const params = { page: 1, size: 500 }
+    if (chartDateRange.value.length === 2) {
+      params.from = chartDateRange.value[0]
+      params.to = chartDateRange.value[1]
     }
-  } catch (err) {
-    console.error('加载用户列表失败：', err)
-    ElMessage.error('加载用户列表失败')
-  }
-}
-
-// 获取学习记录（带筛选和分页）
-const fetchRecords = async () => {
-  try {
-    loading.value = true
-    const params = {
-      page: pageNum.value,
-      size: pageSize.value
-    }
-
-    // 拼接筛选条件
-    if (selectedUser.value) params.userId = selectedUser.value
-    if (dateRange.value.length === 2) {
-      params.from = dateRange.value[0]
-      params.to = dateRange.value[1]
-    }
-
     const res = await request.get('/api/study-sessions', { params })
-    if (res.code === 200) {
-      studyRecordList.value = res.data.map(item => ({
-        ...item,
-        userName: item.userName || `未知用户(${item.userId})`
-      }))
-      total.value = res.total
-      pageNum.value = res.page
-      pageSize.value = res.size
+    if (res.code !== 200 || !res.data || !res.data.length) {
+      trendEmpty.value = true
+      return
     }
-  } catch (err) {
-    console.error('获取学习记录失败：', err)
-    ElMessage.error('获取学习记录失败')
-  } finally {
-    loading.value = false
+
+    const dateMap = {}
+    res.data.forEach(s => {
+      const date = s.startTime.split(' ')[0]
+      dateMap[date] = (dateMap[date] || 0) + s.duration
+    })
+    const dates = Object.keys(dateMap).sort()
+    const durations = dates.map(d => dateMap[d])
+    if (!dates.length) { trendEmpty.value = true; return }
+    trendEmpty.value = false
+
+    await nextTick()
+    trendChart?.dispose()
+    trendChart = echarts.init(trendChartRef.value)
+    trendChart.setOption({
+      tooltip: { trigger: 'axis', formatter: '{b}<br/>总时长: {c} 分钟' },
+      grid: { left: 50, right: 20, top: 30, bottom: 30 },
+      xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#dcdfe6' } } },
+      yAxis: { type: 'value', name: '分钟', nameTextStyle: { color: '#909399' }, splitLine: { lineStyle: { color: '#f0f2f5' } } },
+      series: [{
+        type: 'bar', data: durations,
+        barWidth: '40%',
+        itemStyle: {
+          borderRadius: [6, 6, 0, 0],
+          color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#667eea' }, { offset: 1, color: '#764ba2' }] }
+        },
+      }],
+    })
+    window.addEventListener('resize', () => trendChart?.resize())
+  } catch (e) {
+    trendEmpty.value = true
+    console.error('Trend chart error:', e)
   }
 }
 
-// 分页事件处理
-const handleSizeChange = (val) => {
-  pageSize.value = val
-  fetchRecords()
-}
+const handleSizeChange = (val) => { pageSize.value = val; fetchRecords() }
+const handleCurrentChange = (val) => { pageNum.value = val; fetchRecords() }
 
-const handleCurrentChange = (val) => {
-  pageNum.value = val
-  fetchRecords()
-}
-
-// 初始化
 onMounted(async () => {
   await fetchUserList()
-  fetchRecords()
+  await Promise.all([fetchRecords(), initTrendChart()])
 })
+
+onUnmounted(() => trendChart?.dispose())
 </script>
 
 <style scoped>
 .study-data-container {
-  padding: 20px;
-  background: #fff;
-  min-height: calc(100vh - 60px);
+  padding: 24px;
+  min-height: 100%;
 }
 
-.el-button {
-  margin-right: 10px;
+.page-header {
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.page-desc {
+  font-size: 14px;
+  color: #909399;
+  margin-top: 4px;
+}
+
+.chart-card {
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.chart-empty {
+  margin-top: -340px;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.table-card {
+  border-radius: 12px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.pagination {
+  margin-top: 20px;
+  justify-content: flex-end;
 }
 </style>

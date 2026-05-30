@@ -1,309 +1,327 @@
 <template>
-  <div class="dashboard-container">
-    <!-- 页面标题区域 -->
-    <div class="page-header-wrapper">
-      <span class="header-title">数据统计中心</span>
+  <div class="dashboard-container" v-loading="loading" element-loading-text="正在加载数据...">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">📊 数据统计中心</h2>
+        <p class="page-desc">智能学习桌管理系统总览</p>
+      </div>
+      <el-button type="primary" @click="fetchData">
+        <el-icon><Refresh /></el-icon> 刷新数据
+      </el-button>
     </div>
 
-    <!-- 加载状态 -->
-    <el-loading 
-      v-if="loading" 
-      fullscreen 
-      lock 
-      text="正在加载数据..."
-      background="rgba(255, 255, 255, 0.8)"
-    ></el-loading>
-
-    <!-- 统计卡片区域 -->
-    <el-row :gutter="24" class="stats-row" v-if="!loading">
-      <!-- 学生总人数卡片 -->
-      <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4" class="stat-col">
-        <el-card class="stat-card student-card">
-          <div class="card-header">
-            <i class="el-icon-user-solid card-icon"></i>
-            <div class="card-title">学生总人数</div>
+    <el-row :gutter="20" class="stats-row">
+      <el-col :xs="12" :sm="8" :md="6" :lg="4" v-for="stat in stats" :key="stat.label">
+        <el-card shadow="hover" class="stat-card" :style="`border-top: 3px solid ${stat.color}`">
+          <div class="stat-content">
+            <div class="stat-info">
+              <div class="stat-label">{{ stat.label }}</div>
+              <div class="stat-value">{{ stat.value }}</div>
+            </div>
+            <el-icon :size="44" :color="stat.color"><component :is="stat.icon" /></el-icon>
           </div>
-          <div class="card-value">{{ studentCount }}</div>
-          <div class="card-desc">全校注册学生总数</div>
-        </el-card>
-      </el-col>
-
-      <!-- 在线设备数卡片 -->
-      <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4" class="stat-col">
-        <el-card class="stat-card online-card">
-          <div class="card-header">
-            <i class="el-icon-video-play card-icon"></i>
-            <div class="card-title">在线设备数</div>
-          </div>
-          <div class="card-value">{{ onlineDeviceNum }}</div>
-          <div class="card-desc">当前在线的设备数量</div>
-        </el-card>
-      </el-col>
-
-      <!-- 离线设备数卡片 -->
-      <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4" class="stat-col">
-        <el-card class="stat-card offline-card">
-          <div class="card-header">
-            <i class="el-icon-video-pause card-icon"></i>
-            <div class="card-title">离线设备数</div>
-          </div>
-          <div class="card-value">{{ offlineDeviceNum }}</div>
-          <div class="card-desc">当前离线的设备数量</div>
-        </el-card>
-      </el-col>
-
-      <!-- 设备总数卡片 -->
-      <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4" class="stat-col">
-        <el-card class="stat-card total-card">
-          <div class="card-header">
-            <i class="el-icon-laptop card-icon"></i>
-            <div class="card-title">设备总数</div>
-          </div>
-          <div class="card-value">{{ totalDeviceNum }}</div>
-          <div class="card-desc">已注册的设备总数量</div>
-        </el-card>
-      </el-col>
-
-      <!-- 在线率卡片 -->
-      <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="4" class="stat-col">
-        <el-card class="stat-card rate-card">
-          <div class="card-header">
-            <i class="el-icon-percentage card-icon"></i>
-            <div class="card-title">设备在线率</div>
-          </div>
-          <div class="card-value">{{ onlineRate }}</div>
-          <div class="card-desc">在线设备占总设备比例</div>
         </el-card>
       </el-col>
     </el-row>
 
-    <!-- 提示信息区域 -->
-    <div class="tips-wrapper">
-      <el-alert 
-        title="📌 操作提示" 
-        description="请在学生管理页面点击“查看详情”进入学生详情，查看当日学习时间和当前坐姿状态。" 
-        type="info" 
-        show-icon 
-        :closable="false"
-        class="info-alert"
-      />
-    </div>
+    <el-row :gutter="20" class="charts-row">
+      <el-col :xs="24" :lg="16">
+        <el-card class="chart-card">
+          <template #header>
+            <div class="chart-header">
+              <span>📈 学习时长趋势</span>
+              <el-tag type="success" size="small">近7日</el-tag>
+            </div>
+          </template>
+          <div ref="studyChartRef" style="height: 320px"></div>
+          <div v-if="studyChartEmpty" class="chart-empty">
+            <el-empty description="暂无足够数据生成趋势图" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :lg="8">
+        <el-card class="chart-card">
+          <template #header>
+            <div class="chart-header">
+              <span>🖥️ 设备状态分布</span>
+            </div>
+          </template>
+          <div ref="deviceChartRef" style="height: 320px"></div>
+          <div v-if="deviceChartEmpty" class="chart-empty">
+            <el-empty description="暂无设备数据" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-card class="recent-card">
+      <template #header>
+        <div class="chart-header">
+          <span>📋 最近学习记录</span>
+          <el-button text type="primary" size="small" @click="$router.push('/study-data')">
+            查看全部
+          </el-button>
+        </div>
+      </template>
+      <el-table :data="recentSessions" stripe empty-text="暂无学习记录" v-loading="sessionsLoading">
+        <el-table-column prop="recordId" label="记录ID" width="100" />
+        <el-table-column prop="userName" label="学生" width="120" />
+        <el-table-column prop="startTime" label="开始时间" />
+        <el-table-column prop="endTime" label="结束时间" />
+        <el-table-column prop="duration" label="时长(分钟)" width="120" align="center">
+          <template #default="{ row }">
+            <el-tag>{{ row.duration }}</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, nextTick, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import request from '../utils/request'
+import * as echarts from 'echarts'
+import { Refresh } from '@element-plus/icons-vue'
 
-// 加载状态
+const router = useRouter()
+
 const loading = ref(false)
+const sessionsLoading = ref(false)
 
-// 统计数据
+const studyChartRef = ref(null)
+const deviceChartRef = ref(null)
+let studyChart = null
+let deviceChart = null
+const studyChartEmpty = ref(false)
+const deviceChartEmpty = ref(false)
+
 const studentCount = ref(0)
 const onlineDeviceNum = ref(0)
 const totalDeviceNum = ref(0)
-const offlineDeviceNum = computed(() => totalDeviceNum.value - onlineDeviceNum.value)
-const onlineRate = computed(() => {
-  if (!totalDeviceNum.value) return '0.0%'
-  return ((onlineDeviceNum.value / totalDeviceNum.value) * 100).toFixed(1) + '%'
-})
+const offlineDeviceNum = ref(0)
+const onlineRate = ref('0.0%')
 
-// 未使用的字段（保留）
-const dayStudyTime = ref(0)
-const weekStudyTime = ref(0)
-const postureStatus = ref('未知')
+const recentSessions = ref([])
 
-// 获取数据
+const stats = reactive([])
+
+const updateStats = () => {
+  const total = totalDeviceNum.value
+  const online = onlineDeviceNum.value
+  const offline = Math.max(total - online, 0)
+  const rate = total ? ((online / total) * 100).toFixed(1) + '%' : '0.0%'
+
+  Object.assign(stats, [
+    { label: '学生总人数', value: studentCount.value, icon: 'User', color: '#409eff' },
+    { label: '在线设备数', value: online, icon: 'VideoPlay', color: '#67c23a' },
+    { label: '离线设备数', value: offline, icon: 'VideoPause', color: '#e6a23c' },
+    { label: '设备总数', value: total, icon: 'Monitor', color: '#909399' },
+    { label: '设备在线率', value: rate, icon: 'TrendCharts', color: '#f56c6c' },
+  ])
+}
+
 const fetchData = async () => {
   loading.value = true
   try {
-    // 获取学生总数
-    const userRes = await request.get('/api/users', { params: { page: 1, size: 1 } })
-    if (userRes.code === 200) {
-      studentCount.value = userRes.data.total || 0
-    }
-
-    // 获取学习时间（保留）
-    const studyRes = await request.get('/api/study-time', { params: { userId: 1001 } })
-    if (studyRes.code === 200) {
-      dayStudyTime.value = studyRes.data.dayStudyTime
-      weekStudyTime.value = studyRes.data.weekStudyTime
-    }
-
-    // 获取坐姿状态（保留）
-    const postureRes = await request.get('/api/posture', { params: { userId: 1001 } })
-    if (postureRes.code === 200) {
-      postureStatus.value = postureRes.data.status === 'normal' ? '正确' : '错误';
-    }
-
-    // 获取设备数据
-    const deviceRes = await request.get('/api/devices')
-    if (deviceRes.code === 200) {
+    const [userRes, deviceRes] = await Promise.all([
+      request.get('/api/users', { params: { page: 1, size: 1 } }),
+      request.get('/api/devices'),
+    ])
+    if (userRes.code === 200) studentCount.value = userRes.data.total || 0
+    if (deviceRes.code === 200 && deviceRes.data) {
       totalDeviceNum.value = deviceRes.data.total || deviceRes.data.list.length
-      onlineDeviceNum.value = deviceRes.data.list.filter(item => item.status === 'online').length
+      onlineDeviceNum.value = deviceRes.data.list.filter(i => i.status === 'online').length
     }
-  } catch (err) {
-    console.error('数据加载失败：', err)
-    import('element-plus').then(({ ElMessage }) => {
-      ElMessage.error('数据加载失败，请检查后端是否启动')
-    })
+  } catch (e) {
+    console.error('Dashboard load error:', e)
   } finally {
     loading.value = false
+    updateStats()
   }
 }
 
-// 页面挂载时加载数据
+const initStudyChart = async () => {
+  try {
+    const res = await request.get('/api/study-sessions', { params: { page: 1, size: 200 } })
+    if (res.code === 200 && res.data && res.data.length) {
+      const dateMap = {}
+      res.data.forEach(s => {
+        const date = s.startTime.split(' ')[0]
+        dateMap[date] = (dateMap[date] || 0) + s.duration
+      })
+      const dates = Object.keys(dateMap).sort()
+      const durations = dates.map(d => dateMap[d])
+      if (!dates.length) { studyChartEmpty.value = true; return }
+
+      await nextTick()
+      studyChart = echarts.init(studyChartRef.value)
+      studyChart.setOption({
+        tooltip: { trigger: 'axis', formatter: '{b}<br/>学习时长: {c} 分钟' },
+        grid: { left: 50, right: 20, top: 30, bottom: 30 },
+        xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#dcdfe6' } } },
+        yAxis: { type: 'value', name: '分钟', nameTextStyle: { color: '#909399' }, splitLine: { lineStyle: { color: '#f0f2f5' } } },
+        series: [{
+          type: 'line', smooth: true, data: durations,
+          areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(102,126,234,0.3)' }, { offset: 1, color: 'rgba(102,126,234,0.02)' }] } },
+          lineStyle: { color: '#667eea', width: 3 },
+          itemStyle: { color: '#667eea' },
+        }],
+      })
+      window.addEventListener('resize', () => studyChart?.resize())
+    } else {
+      studyChartEmpty.value = true
+    }
+  } catch (e) {
+    studyChartEmpty.value = true
+    console.error('Study chart error:', e)
+  }
+}
+
+const initDeviceChart = async () => {
+  try {
+    const res = await request.get('/api/devices')
+    if (res.code === 200 && res.data && res.data.list.length) {
+      const list = res.data.list
+      const statusCount = { online: 0, offline: 0, error: 0 }
+      list.forEach(d => { statusCount[d.status] = (statusCount[d.status] || 0) + 1 })
+      const data = Object.entries(statusCount).filter(([, v]) => v > 0)
+      if (!data.length) { deviceChartEmpty.value = true; return }
+
+      const colorMap = { online: '#67c23a', offline: '#e6a23c', error: '#f56c6c' }
+      const nameMap = { online: '在线', offline: '离线', error: '故障' }
+
+      await nextTick()
+      deviceChart = echarts.init(deviceChartRef.value)
+      deviceChart.setOption({
+        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+        series: [{
+          type: 'pie', radius: ['40%', '70%'], avoidLabelOverlap: true,
+          label: { show: true, formatter: '{b}\n{d}%' },
+          emphasis: { label: { show: true, fontSize: 14 } },
+          data: data.map(([k, v]) => ({ name: nameMap[k] || k, value: v, itemStyle: { color: colorMap[k] || '#909399' } })),
+        }],
+      })
+      window.addEventListener('resize', () => deviceChart?.resize())
+    } else {
+      deviceChartEmpty.value = true
+    }
+  } catch (e) {
+    deviceChartEmpty.value = true
+    console.error('Device chart error:', e)
+  }
+}
+
+const loadRecentSessions = async () => {
+  sessionsLoading.value = true
+  try {
+    const res = await request.get('/api/study-sessions', { params: { page: 1, size: 10 } })
+    if (res.code === 200) {
+      recentSessions.value = (res.data || []).map(s => ({
+        ...s,
+        userName: s.userName || `用户${s.userId}`
+      }))
+    }
+  } catch (e) {
+    console.error('Recent sessions error:', e)
+  } finally {
+    sessionsLoading.value = false
+  }
+}
+
 onMounted(async () => {
-  await fetchData()
+  await Promise.all([fetchData(), initStudyChart(), initDeviceChart(), loadRecentSessions()])
+})
+
+onUnmounted(() => {
+  studyChart?.dispose()
+  deviceChart?.dispose()
 })
 </script>
 
 <style scoped>
-/* 全局容器 */
 .dashboard-container {
   padding: 24px;
-  background: #f5f7fa;
-  min-height: 100vh;
-}
-
-/* 页面标题区域 */
-.page-header-wrapper {
-  margin-bottom: 32px;
+  min-height: 100%;
 }
 
 .page-header {
-  --el-page-header-text-color: #1989fa;
-  --el-page-header-font-size: 20px;
-  font-weight: 600;
-}
-
-/* 统计卡片行 */
-.stats-row {
-  margin-bottom: 32px;
-}
-
-/* 卡片列 */
-.stat-col {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 24px;
 }
 
-/* 统计卡片通用样式 */
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.page-desc {
+  font-size: 14px;
+  color: #909399;
+  margin-top: 4px;
+}
+
+.stats-row {
+  margin-bottom: 24px;
+}
+
 .stat-card {
-  height: 180px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s ease;
-  border: none;
-  overflow: hidden;
-  position: relative;
-  background: #fff;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
 }
 
 .stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
 }
 
-/* 卡片内部布局 */
-.card-header {
+.stat-content {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding: 0 16px;
-  padding-top: 20px;
 }
 
-.card-icon {
-  font-size: 20px;
-  margin-right: 8px;
-  color: #409eff;
-}
-
-.card-title {
-  font-size: 15px;
-  color: #606266;
-  font-weight: 500;
-}
-
-.card-value {
-  font-size: 36px;
-  font-weight: 700;
-  color: #1f2937;
-  padding: 0 16px;
-  line-height: 1.2;
+.stat-label {
+  font-size: 14px;
+  color: #909399;
   margin-bottom: 8px;
 }
 
-.card-desc {
-  font-size: 13px;
-  color: #909399;
-  padding: 0 16px;
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
 }
 
-/* 不同卡片的主题色 */
-.student-card .card-icon {
-  color: #409eff;
+.charts-row {
+  margin-bottom: 24px;
 }
 
-.online-card .card-icon {
-  color: #67c23a;
+.chart-card {
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
-.offline-card .card-icon {
-  color: #e6a23c;
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.total-card .card-icon {
-  color: #909399;
+.chart-empty {
+  margin-top: -320px;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
 }
 
-.rate-card .card-icon {
-  color: #f56c6c;
+.recent-card {
+  border-radius: 12px;
 }
-
-/* 提示信息区域 */
-.tips-wrapper {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.info-alert {
-  border-radius: 8px;
-  background: #f0f9ff;
-  border: 1px solid #e6f7ff;
-}
-
-/* 响应式适配 */
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 16px;
-  }
-
-  .card-value {
-    font-size: 28px;
-  }
-
-  .page-header-wrapper {
-    margin-bottom: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-value {
-    font-size: 24px;
-  }
-
-  .stat-card {
-    height: 160px;
-  }
-}
-</style>
-
-<style>
-/* 隐藏滚动条但保留滚动功能（可选） */
-::-webkit-scrollbar {
-  display: none;
-}
--ms-overflow-style: none;
-scrollbar-width: none;
 </style>

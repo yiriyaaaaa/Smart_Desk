@@ -1,0 +1,30 @@
+<view class="page">
+  <view class="header-mini">
+    <text class="header-mini-title">📚 学习记录</text>
+    <text class="header-mini-sub">查看你的学习历程</text>
+  </view>
+
+  <view class="content">
+    <block wx:for="{{sessions}}" wx:key="recordId" wx:for-index="index">
+      <view class="session-card animate-fade-in-up delay-{{index + 1}}">
+        <view class="session-left">
+          <view class="session-dot"></view>
+          <view class="session-line" wx:if="{{index < sessions.length - 1}}"></view>
+        </view>
+        <view class="session-right">
+          <view class="session-header">
+            <text class="session-duration">{{item.duration}} 分钟</text>
+          </view>
+          <view class="session-time">
+            <text>🕐 {{item.startTime}} - {{item.endTime}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view wx:if="{{sessions.length === 0}}" class="empty-state animate-fade-in">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">暂无学习记录</text>
+    </view>
+  </view>
+</view>

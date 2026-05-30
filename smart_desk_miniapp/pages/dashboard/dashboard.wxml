@@ -1,0 +1,91 @@
+<view class="page">
+  <view class="header">
+    <view class="header-content">
+      <text class="greeting">👋 欢迎回来</text>
+      <text class="subtitle">你的智能学习桌已就绪</text>
+    </view>
+    <view class="header-icon">📖</view>
+  </view>
+
+  <view class="content">
+    <view class="card animate-fade-in-up delay-1">
+      <view class="card-header">
+        <text class="card-icon">📚</text>
+        <text class="card-title">今日学习</text>
+      </view>
+      <view class="study-body">
+        <text class="study-number">{{totalDuration}}</text>
+        <text class="study-unit">分钟</text>
+      </view>
+      <view class="card-footer">
+        <text class="footer-text">💪 保持专注，继续加油！</text>
+      </view>
+    </view>
+
+    <view class="row">
+      <view class="card card-half animate-fade-in-up delay-2">
+        <view class="card-header">
+          <text class="card-icon">🧍</text>
+          <text class="card-title">坐姿状态</text>
+        </view>
+        <view class="posture-body">
+          <view class="status-badge {{postureStatus === '良好' ? 'badge-good' : 'badge-warn'}}">
+            <view class="status-dot {{postureStatus === '良好' ? 'dot-good' : 'dot-warn'}}"></view>
+            <text>{{postureStatus || '--'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card card-half animate-fade-in-up delay-3">
+        <view class="card-header">
+          <text class="card-icon">⭐</text>
+          <text class="card-title">今日评价</text>
+        </view>
+        <view class="posture-body">
+          <text class="evaluate-text">{{postureStatus === '良好' ? '非常棒！' : '需要调整'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-4">
+      <view class="card-header">
+        <text class="card-icon">🪑</text>
+        <text class="card-title">设备状态</text>
+      </view>
+      <view class="device-grid">
+        <view class="device-item">
+          <text class="device-label">设备ID</text>
+          <text class="device-value">{{device.id || '--'}}</text>
+        </view>
+        <view class="device-item">
+          <text class="device-label">状态</text>
+          <view class="device-status-indicator {{device.status === '在线' ? 'online' : 'offline'}}">
+            <view class="status-dot-indicator {{device.status === '在线' ? 'dot-online' : 'dot-offline'}}"></view>
+            <text>{{device.status || '--'}}</text>
+          </view>
+        </view>
+        <view class="device-item">
+          <text class="device-label">桌面高度</text>
+          <text class="device-value">{{device.height || '--'}} cm</text>
+        </view>
+        <view class="device-item">
+          <text class="device-label">灯光亮度</text>
+          <view class="light-bar">
+            <view class="light-fill" style="width: {{device.light || 0}}%"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card card-clickable animate-fade-in-up delay-5" bindtap="goToCamera">
+      <view class="card-header">
+        <text class="card-icon">📷</text>
+        <text class="card-title">摄像头监测</text>
+        <text class="card-arrow">›</text>
+      </view>
+      <view class="camera-preview">
+        <text class="camera-hint">点击查看实时学习状态监测画面</text>
+      </view>
+    </view>
+  </view>
+</view>

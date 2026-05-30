@@ -1,0 +1,83 @@
+<view class="page">
+  <view class="header-mini">
+    <text class="header-mini-title">📷 学习状态监测</text>
+    <text class="header-mini-sub">实时摄像头画面监测</text>
+  </view>
+
+  <view class="content">
+    <view class="camera-frame animate-fade-in-up delay-1">
+      <image
+        class="camera-image"
+        src="{{imageUrl}}"
+        mode="aspectFit"
+        binderror="onImageError"
+        bindload="onImageLoad"
+      />
+      <view wx:if="{{imageError}}" class="camera-fallback">
+        <text class="fallback-icon">📷</text>
+        <text class="fallback-text">无法获取画面</text>
+        <text class="fallback-hint">请确认服务器已启动</text>
+      </view>
+      <view class="camera-rec" wx:if="{{isLive && !imageError}}">
+        <view class="rec-dot"></view>
+        <text class="rec-text">LIVE</text>
+      </view>
+      <view class="camera-label">CAM-01</view>
+    </view>
+
+    <view class="status-bar animate-fade-in-up delay-2">
+      <view class="status-item">
+        <text class="status-icon">🕐</text>
+        <text class="status-text">{{currentTime}}</text>
+      </view>
+      <view class="status-item">
+        <view class="live-dot {{isLive && !imageError ? 'live-active' : ''}}"></view>
+        <text class="status-text">{{imageError ? '信号断开' : (isLive ? '信号正常' : '连接中...')}}</text>
+      </view>
+    </view>
+
+    <view class="card card-upload animate-fade-in-up delay-2" bindtap="uploadFromAlbum">
+      <view class="card-header">
+        <text class="card-icon">📤</text>
+        <text class="card-title">上传图片测试</text>
+        <text wx:if="{{uploading}}" class="card-badge loading">上传中...</text>
+        <text wx:elif="{{hasUploadedImage}}" class="card-badge success">已上传</text>
+        <text wx:else class="card-badge idle">未上传</text>
+      </view>
+      <view class="upload-hint">点击选择相册图片，模拟 ESP32 摄像头上传</view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-3">
+      <view class="card-header">
+        <text class="card-icon">ℹ️</text>
+        <text class="card-title">监测信息</text>
+      </view>
+      <view class="info-grid">
+        <view class="info-item">
+          <text class="info-label">设备</text>
+          <text class="info-value">智能学习桌 摄像头</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">分辨率</text>
+          <text class="info-value">480 × 320</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">刷新频率</text>
+          <text class="info-value">3 秒/次</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-4">
+      <view class="card-header">
+        <text class="card-icon">🔌</text>
+        <text class="card-title">ESP32 接入说明</text>
+      </view>
+      <view class="tip-text">
+        方式一：POST /api/camera（multipart/form-data，字段名 image）<br/>
+        方式二：POST /api/camera/base64（JSON，{ "image": "base64数据" }）<br/><br/>
+        图片自动缩放至 480×320 并压缩为 JPG
+      </view>
+    </view>
+  </view>
+</view>

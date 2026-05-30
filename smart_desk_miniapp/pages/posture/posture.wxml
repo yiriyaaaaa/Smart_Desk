@@ -1,0 +1,41 @@
+<view class="page">
+  <view class="header-mini">
+    <text class="header-mini-title">🧍 坐姿监测</text>
+    <text class="header-mini-sub">保持良好的坐姿，保护视力</text>
+  </view>
+
+  <view class="content">
+    <view class="status-card animate-scale-in delay-1">
+      <view class="status-circle {{posture.postureStatus === '良好' ? 'circle-good' : 'circle-warn'}}">
+        <text class="status-emoji">{{posture.postureStatus === '良好' ? '👍' : '⚠️'}}</text>
+      </view>
+      <text class="status-text">{{posture.postureStatus || '--'}}</text>
+      <text class="status-hint">{{posture.postureStatus === '良好' ? '你的坐姿非常标准！' : '建议调整坐姿哦～'}}</text>
+    </view>
+
+    <view class="card animate-fade-in-up delay-2">
+      <view class="card-header">
+        <text class="card-icon">📋</text>
+        <text class="card-title">详细信息</text>
+      </view>
+      <view class="info-grid">
+        <view class="info-item">
+          <text class="info-label">当前状态</text>
+          <text class="info-value">{{posture.postureStatus || '--'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">监测时间</text>
+          <text class="info-value">{{posture.createTime || '--'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="tip-card animate-fade-in-up delay-3">
+      <text class="tip-icon">💡</text>
+      <view class="tip-content">
+        <text class="tip-title">小贴士</text>
+        <text class="tip-text">保持背部挺直，眼睛与屏幕保持一臂距离，每45分钟起身活动一下。</text>
+      </view>
+    </view>
+  </view>
+</view>

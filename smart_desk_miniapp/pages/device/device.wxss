@@ -1,0 +1,178 @@
+.page {
+  min-height: 100vh;
+}
+
+.header-mini {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx;
+}
+
+.header-mini-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.header-mini-sub {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.7);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.content {
+  padding: 30rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.1);
+}
+
+.card-header {
+  margin-bottom: 24rpx;
+}
+
+.device-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #636e72;
+}
+
+.device-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.badge-online {
+  background: #e8f8f5;
+  color: #00b894;
+}
+
+.badge-offline {
+  background: #fef3e2;
+  color: #e17055;
+}
+
+.mini-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+}
+
+.mini-dot-online {
+  background: #00b894;
+  animation: pulse 2s ease infinite;
+}
+
+.mini-dot-offline {
+  background: #e17055;
+}
+
+.device-main-info {
+  display: flex;
+  gap: 32rpx;
+  align-items: center;
+}
+
+.device-icon-area {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 24rpx;
+  background: #f0f2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.device-big-icon {
+  font-size: 56rpx;
+}
+
+.device-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  font-size: 26rpx;
+  color: #b2bec3;
+}
+
+.detail-value {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #2d3436;
+}
+
+.params {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.param-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.param-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.param-label {
+  font-size: 26rpx;
+  color: #636e72;
+}
+
+.param-value {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.param-bar {
+  height: 12rpx;
+  background: #f0f2f5;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.param-fill {
+  height: 100%;
+  border-radius: 10rpx;
+  transition: width 0.8s ease;
+}
+
+.height-fill {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.light-fill {
+  background: linear-gradient(90deg, #fdcb6e, #f39c12);
+}
