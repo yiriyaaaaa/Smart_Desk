@@ -29,6 +29,18 @@
           <el-icon><Monitor /></el-icon>
           <span>设备管理</span>
         </el-menu-item>
+        <el-menu-item index="/car">
+          <el-icon><Opportunity /></el-icon>
+          <span>智能小车</span>
+        </el-menu-item>
+        <el-menu-item index="/flower-pot">
+          <el-icon><Cherry /></el-icon>
+          <span>智能植栽</span>
+        </el-menu-item>
+        <el-menu-item index="/fish-tank">
+          <el-icon><Pouring /></el-icon>
+          <span>智能鱼缸</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 
@@ -74,7 +86,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   DataAnalysis, User, Notebook, Monitor,
-  Setting, SwitchButton
+  Setting, SwitchButton, Opportunity, Pouring, Cherry
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -84,7 +96,10 @@ const pageTitle = computed(() => {
     '/': '数据统计',
     '/students': '学生管理',
     '/study-data': '学习数据',
-    '/devices': '设备管理'
+    '/devices': '设备管理',
+    '/car': '智能小车',
+    '/flower-pot': '智能植栽',
+    '/fish-tank': '智能鱼缸'
   }
   const matched = route.matched.find(r => map[r.path])
   return matched ? map[matched.path] : ''
