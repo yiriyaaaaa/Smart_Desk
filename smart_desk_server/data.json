@@ -1,171 +1,162 @@
 {
-  "users": [
-    {
-      "id": 1002,
-      "name": "李四",
-      "class": "一年级2班"
-    },
-    {
-      "id": 1003,
-      "name": "梅轩宇",
-      "class": "一年级3班"
-    },
-    {
-      "id": 1005,
-      "name": "马天元",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1006,
-      "name": "梅轩宇",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1007,
-      "name": "荣昊天",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1008,
-      "name": "马天元",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1009,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1010,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1011,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1012,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1013,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1014,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1015,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1016,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1017,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1018,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1019,
-      "name": "李四",
-      "class": "一年级5班"
-    },
-    {
-      "id": 1020,
-      "name": "李四",
-      "class": "一年级5班"
-    }
-  ],
-  "study_sessions": [
-    {
-      "recordId": 2001,
-      "userId": 1001,
-      "startTime": "2026-03-09 08:30:00",
-      "endTime": "2026-03-09 11:00:00",
-      "duration": 150
-    },
-    {
-      "recordId": 2002,
-      "userId": 1001,
-      "startTime": "2026-03-09 14:00:00",
-      "endTime": "2026-03-09 16:30:00",
-      "duration": 150
-    },
-    {
-      "recordId": 2003,
-      "userId": 1002,
-      "startTime": "2026-03-09 09:00:00",
-      "endTime": "2026-03-09 10:30:00",
-      "duration": 90
-    },
-    {
-      "recordId": 2004,
-      "userId": 1003,
-      "startTime": "2026-03-09 10:00:00",
-      "endTime": "2026-03-09 11:30:00",
-      "duration": 90
-    },
-    {
-      "recordId": 2005,
-      "userId": 1004,
-      "startTime": "2026-03-09 13:00:00",
-      "endTime": "2026-03-09 15:00:00",
-      "duration": 120
-    }
-  ],
-  "devices": [
-    {
-      "id": 3001,
-      "status": "online",
-      "height": 72,
-      "light": 300,
-      "lastUpdateTime": "2026-03-09 10:30:00"
-    },
-    {
-      "id": 3002,
-      "status": "offline",
-      "height": 75,
-      "light": 280,
-      "lastUpdateTime": "2026-03-08 18:15:00"
-    },
-    {
-      "id": 3003,
-      "status": "error",
-      "height": 70,
-      "light": 320,
-      "lastUpdateTime": "2026-03-09 09:45:00"
-    }
-  ],
+  "users": [],
+  "study_sessions": [],
+  "devices": [],
   "posture": [
-    {
-      "userId": 1001,
-      "postureStatus": "normal",
-      "createTime": "2026-03-09 08:30:00"
-    },
-    {
-      "userId": 1001,
-      "postureStatus": "abnormal",
-      "createTime": "2026-03-09 09:15:00"
-    },
     {
       "userId": 4001,
       "postureStatus": "normal",
-      "createTime": "2026-05-30 10:06:27"
+      "createTime": "2026-07-16 20:42:52"
+    }
+  ],
+  "flower_pot": [],
+  "fish_tank": [],
+  "sensors": [
+    {
+      "id": 1,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:41:04.707Z"
+    },
+    {
+      "id": 2,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:41:21.170Z"
+    },
+    {
+      "id": 3,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:41:37.624Z"
+    },
+    {
+      "id": 4,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:41:50.154Z"
+    },
+    {
+      "id": 5,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:42:05.405Z"
+    },
+    {
+      "id": 6,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:42:16.925Z"
+    },
+    {
+      "id": 7,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:42:30.186Z"
+    },
+    {
+      "id": 8,
+      "userId": 4001,
+      "deviceId": "smart-plant-s3cam",
+      "lux": 380,
+      "temperature": 25.600000381469727,
+      "humidity": 62,
+      "soilMoisture": 46,
+      "climateValid": true,
+      "tankLow": false,
+      "pumpOn": false,
+      "growLightOn": false,
+      "createTime": "2026-07-16T12:42:44.526Z"
+    }
+  ],
+  "car_states": [],
+  "car_scans": [],
+  "fishtank_states": [],
+  "fishtank_history": [],
+  "commands": [],
+  "fishtank": [
+    {
+      "deviceId": "smart-fishtank-01",
+      "temperature": 23.3125,
+      "ph": 7.698182106018066,
+      "turbidityNtu": 107.42455291748047,
+      "heaterOn": false,
+      "alertOn": false,
+      "createTime": "2026-07-16T13:13:49.339Z"
+    },
+    {
+      "deviceId": "smart-fishtank-01",
+      "temperature": 23.3125,
+      "ph": 8.193034172058105,
+      "turbidityNtu": 107.42455291748047,
+      "heaterOn": false,
+      "alertOn": false,
+      "createTime": "2026-07-16T13:14:02.647Z"
+    },
+    {
+      "deviceId": "smart-fishtank-01",
+      "temperature": -1000,
+      "ph": 2.149503707885742,
+      "turbidityNtu": 17115.958984375,
+      "heaterOn": false,
+      "alertOn": false,
+      "createTime": "2026-07-16T13:14:23.330Z"
     }
   ]
 }
