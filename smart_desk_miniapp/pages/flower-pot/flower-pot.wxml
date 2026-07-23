@@ -1,0 +1,120 @@
+<view class="page">
+  <view class="header-mini">
+    <text class="header-mini-title">🪴 智能植栽</text>
+    <text class="header-mini-sub">实时监测环境与土壤数据</text>
+  </view>
+
+  <view class="content">
+    <view class="card animate-fade-in-up delay-1">
+      <view class="card-header">
+        <text class="card-title">设备信息</text>
+      </view>
+      <view class="device-main-info">
+        <view class="device-icon-area">
+          <text class="device-big-icon">🪴</text>
+        </view>
+        <view class="device-details">
+          <view class="detail-row">
+            <text class="detail-label">设备ID</text>
+            <text class="detail-value">{{deviceId}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">水箱</text>
+            <text class="detail-value {{tankLow ? 'warn-text' : 'ok-text'}}">{{tankLow ? '缺水' : '正常'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">最后更新</text>
+            <text class="detail-value">{{formattedTime}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-2">
+      <view class="card-header">
+        <text class="card-icon">🌱</text>
+        <text class="card-title">环境参数</text>
+      </view>
+      <view class="params">
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">土壤湿度</text>
+            <text class="param-value">{{soilMoisture}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill soil-fill" style="width: {{sensor.soilMoisture || 0}}%"></view>
+          </view>
+        </view>
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">温度</text>
+            <text class="param-value">{{temperature}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill temp-fill" style="width: {{((sensor.temperature || 0) / 40) * 100}}%"></view>
+          </view>
+        </view>
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">湿度</text>
+            <text class="param-value">{{humidity}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill hum-fill" style="width: {{sensor.humidity || 0}}%"></view>
+          </view>
+        </view>
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">光照</text>
+            <text class="param-value">{{lux}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill light-fill" style="width: {{Math.min((sensor.lux || 0) / 1000 * 100, 100)}}%"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-3">
+      <view class="card-header">
+        <text class="card-icon">⚙️</text>
+        <text class="card-title">设备状态</text>
+      </view>
+      <view class="status-grid">
+        <view class="status-item {{pumpOn ? 'status-on' : 'status-off'}}">
+          <text class="status-icon">{{pumpOn ? '🟢' : '⚪'}}</text>
+          <text>水泵</text>
+        </view>
+        <view class="status-item {{growLightOn ? 'status-on' : 'status-off'}}">
+          <text class="status-icon">{{growLightOn ? '🟢' : '⚪'}}</text>
+          <text>补光灯</text>
+        </view>
+        <view class="status-item {{!tankLow ? 'status-on' : 'status-off'}}">
+          <text class="status-icon">{{!tankLow ? '🟢' : '🔴'}}</text>
+          <text>水箱</text>
+        </view>
+        <view class="status-item {{climateValid ? 'status-on' : 'status-off'}}">
+          <text class="status-icon">{{climateValid ? '🟢' : '⚪'}}</text>
+          <text>温湿度</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-4">
+      <view class="card-header">
+        <text class="card-icon">🎮</text>
+        <text class="card-title">控制</text>
+      </view>
+      <view class="control-grid">
+        <view class="ctrl-btn {{tankLow ? 'ctrl-disabled' : ''}}" bindtap="water">
+          <text class="ctrl-icon">💧</text>
+          <text class="ctrl-label">浇水(5s)</text>
+        </view>
+        <view class="ctrl-btn" bindtap="toggleLight">
+          <text class="ctrl-icon">💡</text>
+          <text class="ctrl-label">{{growLightOn ? '关闭' : '开启'}}补光</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

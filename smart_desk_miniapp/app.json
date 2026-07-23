@@ -4,6 +4,9 @@
     "pages/study/study",
     "pages/posture/posture",
     "pages/device/device",
+    "pages/car/car",
+    "pages/flower-pot/flower-pot",
+    "pages/fish-tank/fish-tank",
     "pages/profile/profile",
     "pages/camera/camera"
   ],

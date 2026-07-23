@@ -1,0 +1,96 @@
+<view class="page">
+  <view class="header-mini">
+    <text class="header-mini-title">🐠 智能鱼缸</text>
+    <text class="header-mini-sub">实时监测水质数据</text>
+  </view>
+
+  <view class="content">
+    <view class="card animate-fade-in-up delay-1">
+      <view class="card-header">
+        <view class="device-status-header">
+          <text class="card-title">设备信息</text>
+          <view class="device-badge {{online ? 'badge-online' : 'badge-offline'}}">
+            <view class="mini-dot {{online ? 'mini-dot-online' : 'mini-dot-offline'}}"></view>
+            <text>{{online ? '在线' : '离线'}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="device-main-info">
+        <view class="device-icon-area">
+          <text class="device-big-icon">🐠</text>
+        </view>
+        <view class="device-details">
+          <view class="detail-row">
+            <text class="detail-label">设备ID</text>
+            <text class="detail-value">{{deviceId}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">加热棒</text>
+            <text class="detail-value {{heaterOn ? 'ok-text' : ''}}">{{heaterOn ? '工作中' : '关闭'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">警报灯</text>
+            <text class="detail-value {{alertOn ? 'warn-text' : ''}}">{{alertOn ? '开启' : '关闭'}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">最后更新</text>
+            <text class="detail-value">{{formattedTime}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-2">
+      <view class="card-header">
+        <text class="card-icon">💧</text>
+        <text class="card-title">水质参数</text>
+      </view>
+      <view class="params">
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">水温</text>
+            <text class="param-value">{{temperature}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill temp-fill" style="width: {{((tank.temperature || 0) / 35) * 100}}%"></view>
+          </view>
+        </view>
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">pH值</text>
+            <text class="param-value">{{ph}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill ph-fill" style="width: {{((tank.ph || 7) / 14) * 100}}%"></view>
+          </view>
+        </view>
+        <view class="param-item">
+          <view class="param-header">
+            <text class="param-label">浑浊度</text>
+            <text class="param-value">{{turbidity}}</text>
+          </view>
+          <view class="param-bar">
+            <view class="param-fill tur-fill" style="width: {{Math.min((tank.turbidityNtu || 0) / 50 * 100, 100)}}%"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card animate-fade-in-up delay-3">
+      <view class="card-header">
+        <text class="card-icon">🎮</text>
+        <text class="card-title">控制</text>
+      </view>
+      <view class="control-grid">
+        <view class="ctrl-btn" bindtap="feed">
+          <text class="ctrl-icon">🍕</text>
+          <text class="ctrl-label">喂食(1g)</text>
+        </view>
+        <view class="ctrl-btn" bindtap="toggleAlert">
+          <text class="ctrl-icon">🔔</text>
+          <text class="ctrl-label">{{alertOn ? '关闭' : '开启'}}警报</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
